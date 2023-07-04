@@ -19,5 +19,6 @@ jobs:
     - name: Hello World
       run: |
         echo ${{ vars.FOO }}
+        echo ${{secrets.APP_HOST}}
         echo `hostname`
         echo "Hello World"
