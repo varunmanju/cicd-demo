@@ -16,9 +16,15 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    - name: Hello World
+    - name: Validate github action and VM integraton
+      env:
+        APP_HOST: ${{ secrets.APP_HOST }}
+        APP_SSH_USER: ${{secrets.APP_SSH_USER}}
+        APP_SSH_SECRET_KEY: ${{secrets.APP_SSH_SECRET_KEY}}
+    
       run: |
-        echo ${{ vars.FOO }}
-        echo ${{secrets.APP_HOST}}
-        echo `hostname`
-        echo "Hello World"
+        mkdir -p /tmp/keys && chmod 700 /tmp/keys
+        echo "$APP_SSH_SECRET_KEY" > /tmp/keys/private_key && chmod 600 /tmp/keys/private_key
+        ssh -o StrictHostKeyChecking=no -i /tmp/keys/private_key ${APP_SSH_USER}@${APP_HOST} '
+        echo `hostname` 
+        ' 
